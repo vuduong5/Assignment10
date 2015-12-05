@@ -33,14 +33,14 @@ public class JWhiteBoard extends ReceiverAdapter implements ActionListener, Chan
     private JFrame                 mainFrame=null;
     private JPanel                 subPanel=null;
     private DrawPanel              drawPanel=null;
-    private JButton                clearButton, leaveButton;
+    private JButton                clearButton, leaveButton, colorButton;
     private final Random           random=new Random(System.currentTimeMillis());
     private final Font             defaultFont=new Font("Helvetica",Font.PLAIN,12);
     private final Color            drawColor=selectColor();
     private static final Color     backgroundColor=Color.white;
     boolean                        noChannel=false;
     boolean                        jmx;
-    private boolean                useState=false;
+    private boolean                useState=true;
     private long                   stateTimeout=5000;
     private boolean                use_unicasts=false;
     protected boolean              send_own_state_on_merge=true;
@@ -245,6 +245,7 @@ public class JWhiteBoard extends ReceiverAdapter implements ActionListener, Chan
         int blue=Math.abs(random.nextInt()) % 255;
         return new Color(red, blue, blue);
     }
+    
 
 
     /**
@@ -275,15 +276,22 @@ public class JWhiteBoard extends ReceiverAdapter implements ActionListener, Chan
         clearButton=new JButton("Clear");
         clearButton.setFont(defaultFont);
         clearButton.addActionListener(this);
+        colorButton=new JButton("Color");
+        colorButton.setFont(defaultFont);
+        colorButton.addActionListener(this);
         leaveButton=new JButton("Leave");
         leaveButton.setFont(defaultFont);
         leaveButton.addActionListener(this);
         subPanel.add("South", clearButton);
         subPanel.add("South", leaveButton);
+        subPanel.add("South", colorButton);
+        
         mainFrame.getContentPane().add("South", subPanel);
         mainFrame.setBackground(backgroundColor);
         clearButton.setForeground(Color.blue);
         leaveButton.setForeground(Color.blue);
+        colorButton.setForeground(Color.blue);
+        
         mainFrame.pack();
         mainFrame.setLocation(15, 25);
         mainFrame.setBounds(new Rectangle(250, 250));
