@@ -301,7 +301,7 @@ public class JWhiteBoard extends ReceiverAdapter implements ActionListener, Chan
         
         mainFrame.pack();
         mainFrame.setLocation(15, 25);
-        mainFrame.setBounds(new Rectangle(250, 250));
+        mainFrame.setBounds(new Rectangle(700, 500));
 
         if(!noChannel && useState) {
             channel.connect(groupName, null, stateTimeout);
