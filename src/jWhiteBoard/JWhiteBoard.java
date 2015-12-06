@@ -33,7 +33,8 @@ public class JWhiteBoard extends ReceiverAdapter implements ActionListener, Chan
     private JFrame                 mainFrame=null;
     private JPanel                 subPanel=null;
     private DrawPanel              drawPanel=null;
-    private JButton                clearButton, leaveButton, colorButton;
+    private JDialog 			   dialog = null;
+    private JButton                clearButton, leaveButton, BrushColor, BackgroundColor;
     private final Random           random=new Random(System.currentTimeMillis());
     private final Font             defaultFont=new Font("Helvetica",Font.PLAIN,12);
     private final Color            drawColor=selectColor();
@@ -276,21 +277,27 @@ public class JWhiteBoard extends ReceiverAdapter implements ActionListener, Chan
         clearButton=new JButton("Clear");
         clearButton.setFont(defaultFont);
         clearButton.addActionListener(this);
-        colorButton=new JButton("Color");
-        colorButton.setFont(defaultFont);
-        colorButton.addActionListener(this);
+        BackgroundColor =new JButton("Background Color");
+        BackgroundColor.setFont(defaultFont);
+        BackgroundColor.addActionListener(this);
+        BrushColor =new JButton("Color");
+        BrushColor.setFont(defaultFont);
+        BrushColor.addActionListener(this);
         leaveButton=new JButton("Leave");
         leaveButton.setFont(defaultFont);
         leaveButton.addActionListener(this);
         subPanel.add("South", clearButton);
+        subPanel.add("South", BackgroundColor);
+
         subPanel.add("South", leaveButton);
-        subPanel.add("South", colorButton);
+        subPanel.add("South", BrushColor);
         
         mainFrame.getContentPane().add("South", subPanel);
         mainFrame.setBackground(backgroundColor);
         clearButton.setForeground(Color.blue);
+        BackgroundColor.setForeground(Color.blue);
         leaveButton.setForeground(Color.blue);
-        colorButton.setForeground(Color.blue);
+        BrushColor.setForeground(Color.blue);
         
         mainFrame.pack();
         mainFrame.setLocation(15, 25);
@@ -461,7 +468,10 @@ public class JWhiteBoard extends ReceiverAdapter implements ActionListener, Chan
         }
         else if("Leave".equals(command)) {
             stop();
+        }else if("color".equals(command)){
+        	
         }
+        
         else
             System.out.println("Unknown action");
     }
