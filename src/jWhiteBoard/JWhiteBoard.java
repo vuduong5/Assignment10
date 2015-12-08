@@ -37,10 +37,12 @@ public class JWhiteBoard extends ReceiverAdapter implements ActionListener, Chan
     private JButton                clearButton, leaveButton, BrushColor, BackgroundColor;
     private final Random           random=new Random(System.currentTimeMillis());
     private final Font             defaultFont=new Font("Helvetica",Font.PLAIN,12);
-    private Color            drawColor=Color.blue;
+    private Color            	   drawColor=Color.black;
     private static final Color     backgroundColor=Color.white;
     boolean                        noChannel=false;
     boolean                        jmx;
+    private JComboBox jCbox;
+
     private boolean                useState=true;
     private long                   stateTimeout=5000;
     private boolean                use_unicasts=false;
@@ -286,9 +288,11 @@ public class JWhiteBoard extends ReceiverAdapter implements ActionListener, Chan
         leaveButton=new JButton("Leave");
         leaveButton.setFont(defaultFont);
         leaveButton.addActionListener(this);
+        String []sListSize = {"5","10","15","20","25","30"};
+        jCbox = new JComboBox(sListSize);
         subPanel.add("South", clearButton);
         subPanel.add("South", BackgroundColor);
-
+        subPanel.add("South", jCbox);
         subPanel.add("South", leaveButton);
         subPanel.add("South", BrushColor);
         
@@ -298,6 +302,7 @@ public class JWhiteBoard extends ReceiverAdapter implements ActionListener, Chan
         BackgroundColor.setForeground(Color.blue);
         leaveButton.setForeground(Color.blue);
         BrushColor.setForeground(Color.blue);
+        jCbox.setForeground(Color.blue);
         
         mainFrame.pack();
         mainFrame.setLocation(15, 25);
@@ -503,7 +508,8 @@ public class JWhiteBoard extends ReceiverAdapter implements ActionListener, Chan
             return;
         for(Point point: copy.keySet()) {
             // we don't need the color: it is our draw_color anyway
-            DrawCommand comm=new DrawCommand(DrawCommand.DRAW, point.x, point.y, drawColor.getRGB());
+            DrawCommand comm=new DrawCommand(DrawCommand.DRAW, point.x, 
+            		point.y, drawColor.getRGB(), Integer.parseInt(jCbox.getSelectedItem().toString()));
             try {
                 byte[] buf=Util.streamableToByteBuffer(comm);
                 if(use_unicasts)
@@ -666,7 +672,8 @@ public class JWhiteBoard extends ReceiverAdapter implements ActionListener, Chan
          */
         public void mouseDragged(MouseEvent e) {
             int                 x=e.getX(), y=e.getY();
-            DrawCommand         comm=new DrawCommand(DrawCommand.DRAW, x, y, drawColor.getRGB());
+            DrawCommand         comm=new DrawCommand(DrawCommand.DRAW, x, y, drawColor.getRGB(),
+            					Integer.parseInt(jCbox.getSelectedItem().toString()));
 
             if(noChannel) {
                 drawPoint(comm);
@@ -699,7 +706,7 @@ public class JWhiteBoard extends ReceiverAdapter implements ActionListener, Chan
             	return;
             Color col=new Color(c.rgb);
             gr.setColor(col);
-            gr.fillOval(c.x, c.y, 10, 10);
+            gr.fillOval(c.x, c.y, c.brushSize, c.brushSize);
             repaint();
             if(state != null) {
                 synchronized(state) {
