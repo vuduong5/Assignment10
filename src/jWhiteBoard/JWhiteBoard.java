@@ -37,7 +37,7 @@ public class JWhiteBoard extends ReceiverAdapter implements ActionListener, Chan
     private JButton                clearButton, leaveButton, BrushColor, BackgroundColor;
     private final Random           random=new Random(System.currentTimeMillis());
     private final Font             defaultFont=new Font("Helvetica",Font.PLAIN,12);
-    private final Color            drawColor=selectColor();
+    private Color            drawColor=Color.blue;
     private static final Color     backgroundColor=Color.white;
     boolean                        noChannel=false;
     boolean                        jmx;
@@ -280,7 +280,7 @@ public class JWhiteBoard extends ReceiverAdapter implements ActionListener, Chan
         BackgroundColor =new JButton("Background Color");
         BackgroundColor.setFont(defaultFont);
         BackgroundColor.addActionListener(this);
-        BrushColor =new JButton("Color");
+        BrushColor =new JButton("Brush Color");
         BrushColor.setFont(defaultFont);
         BrushColor.addActionListener(this);
         leaveButton=new JButton("Leave");
@@ -468,8 +468,9 @@ public class JWhiteBoard extends ReceiverAdapter implements ActionListener, Chan
         }
         else if("Leave".equals(command)) {
             stop();
-        }else if("color".equals(command)){
-        	
+        }else if("Brush Color".equals(command)){
+        	Color cbrush = JColorChooser.showDialog(null, "Choose brush color", Color.black);
+        	drawColor = cbrush;
         }
         
         else
