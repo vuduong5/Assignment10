@@ -14,7 +14,7 @@ public class Chat extends ReceiverAdapter {
     public void viewAccepted(View new_view) {
         System.out.println("** view: " + new_view);
     }
-
+    
     public void receive(Message msg) {
         String line="[" + msg.getSrc() + "]: " + msg.getObject();
         System.out.println(line);
@@ -81,3 +81,4 @@ public class Chat extends ReceiverAdapter {
         System.out.println("Chat [-props XML config] [-name name]");
     }
 }
+

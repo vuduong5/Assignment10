@@ -22,6 +22,7 @@ import java.util.List;
  * mouse moves are broadcast to all group members, which then apply them to their canvas<p>
  * @author Bela Ban, Oct 17 2001
  * 
+
  * 
  * 
  */
@@ -34,11 +35,11 @@ public class JWhiteBoard extends ReceiverAdapter implements ActionListener, Chan
     private JPanel                 subPanel=null;
     private DrawPanel              drawPanel=null;
     private JDialog 			   dialog = null;
-    private JButton                clearButton, leaveButton, BrushColor, BackgroundColor;
+    private JButton                clearButton, leaveButton, BrushColor, colorBgButton;
     private final Random           random=new Random(System.currentTimeMillis());
     private final Font             defaultFont=new Font("Helvetica",Font.PLAIN,12);
     private Color            	   drawColor=Color.black;
-    private static final Color     backgroundColor=Color.white;
+    private Color           backgroundColor=Color.white;
     boolean                        noChannel=false;
     boolean                        jmx;
     private JComboBox jCbox;
@@ -279,9 +280,9 @@ public class JWhiteBoard extends ReceiverAdapter implements ActionListener, Chan
         clearButton=new JButton("Clear");
         clearButton.setFont(defaultFont);
         clearButton.addActionListener(this);
-        BackgroundColor =new JButton("Background Color");
-        BackgroundColor.setFont(defaultFont);
-        BackgroundColor.addActionListener(this);
+        colorBgButton =new JButton("Background Color");
+        colorBgButton.setFont(defaultFont);
+        colorBgButton.addActionListener(this);
         BrushColor =new JButton("Brush Color");
         BrushColor.setFont(defaultFont);
         BrushColor.addActionListener(this);
@@ -291,7 +292,7 @@ public class JWhiteBoard extends ReceiverAdapter implements ActionListener, Chan
         String []sListSize = {"5","10","15","20","25","30"};
         jCbox = new JComboBox(sListSize);
         subPanel.add("South", clearButton);
-        subPanel.add("South", BackgroundColor);
+        subPanel.add("South", colorBgButton);
         subPanel.add("South", jCbox);
         subPanel.add("South", leaveButton);
         subPanel.add("South", BrushColor);
@@ -299,7 +300,7 @@ public class JWhiteBoard extends ReceiverAdapter implements ActionListener, Chan
         mainFrame.getContentPane().add("South", subPanel);
         mainFrame.setBackground(backgroundColor);
         clearButton.setForeground(Color.blue);
-        BackgroundColor.setForeground(Color.blue);
+        colorBgButton.setForeground(Color.blue);
         leaveButton.setForeground(Color.blue);
         BrushColor.setForeground(Color.blue);
         jCbox.setForeground(Color.blue);
@@ -458,7 +459,20 @@ public class JWhiteBoard extends ReceiverAdapter implements ActionListener, Chan
         }
     }
 
-
+ // choose background color function
+    public Color BgColor(Color colordefault){
+    	Color cbackground = JColorChooser.showDialog(null, "Choose Background Color", colordefault);
+    	Point p = mainFrame.getLocation();
+		mainFrame.dispose();
+		backgroundColor = cbackground;
+		try {
+			go();
+			mainFrame.setLocation(p);
+		}catch(Exception e1){
+			e1.printStackTrace();
+		}
+		return backgroundColor;
+    }
     /**
      * Action when click [Clear] or [Leave] button
      */
@@ -476,6 +490,8 @@ public class JWhiteBoard extends ReceiverAdapter implements ActionListener, Chan
         }else if("Brush Color".equals(command)){
         	Color cbrush = JColorChooser.showDialog(null, "Choose brush color", Color.black);
         	drawColor = cbrush;
+        } else if("Background Color".equals(command)){
+    		BgColor(backgroundColor);
         }
         
         else
