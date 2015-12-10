@@ -22,6 +22,7 @@ import java.util.List;
  * mouse moves are broadcast to all group members, which then apply them to their canvas<p>
  * @author Bela Ban, Oct 17 2001
  * 
+<<<<<<< HEAD
 
  * 
  * 
@@ -35,7 +36,7 @@ public class JWhiteBoard extends ReceiverAdapter implements ActionListener, Chan
     private JPanel                 subPanel=null;
     private DrawPanel              drawPanel=null;
     private JDialog 			   dialog = null;
-    private JButton                clearButton, leaveButton, BrushColor, colorBgButton;
+    private JButton                clearButton, leaveButton, brushButton, colorBgButton;
     private final Random           random=new Random(System.currentTimeMillis());
     private final Font             defaultFont=new Font("Helvetica",Font.PLAIN,12);
     private Color            	   drawColor=Color.black;
@@ -283,9 +284,9 @@ public class JWhiteBoard extends ReceiverAdapter implements ActionListener, Chan
         colorBgButton =new JButton("Background Color");
         colorBgButton.setFont(defaultFont);
         colorBgButton.addActionListener(this);
-        BrushColor =new JButton("Brush Color");
-        BrushColor.setFont(defaultFont);
-        BrushColor.addActionListener(this);
+        brushButton =new JButton("Brush Color");
+        brushButton.setFont(defaultFont);
+        brushButton.addActionListener(this);
         leaveButton=new JButton("Leave");
         leaveButton.setFont(defaultFont);
         leaveButton.addActionListener(this);
@@ -295,14 +296,14 @@ public class JWhiteBoard extends ReceiverAdapter implements ActionListener, Chan
         subPanel.add("South", colorBgButton);
         subPanel.add("South", jCbox);
         subPanel.add("South", leaveButton);
-        subPanel.add("South", BrushColor);
+        subPanel.add("South", brushButton);
         
         mainFrame.getContentPane().add("South", subPanel);
         mainFrame.setBackground(backgroundColor);
         clearButton.setForeground(Color.blue);
         colorBgButton.setForeground(Color.blue);
         leaveButton.setForeground(Color.blue);
-        BrushColor.setForeground(Color.blue);
+        brushButton.setForeground(Color.blue);
         jCbox.setForeground(Color.blue);
         
         mainFrame.pack();
@@ -473,6 +474,12 @@ public class JWhiteBoard extends ReceiverAdapter implements ActionListener, Chan
 		}
 		return backgroundColor;
     }
+    // main button brush
+    public Color setDraw (Color color){
+    	Color drawcolor = JColorChooser.showDialog(null, "choose draw color",color);
+    	drawColor = drawcolor;
+    	return drawColor;
+    }
     /**
      * Action when click [Clear] or [Leave] button
      */
@@ -488,8 +495,8 @@ public class JWhiteBoard extends ReceiverAdapter implements ActionListener, Chan
         else if("Leave".equals(command)) {
             stop();
         }else if("Brush Color".equals(command)){
-        	Color cbrush = JColorChooser.showDialog(null, "Choose brush color", Color.black);
-        	drawColor = cbrush;
+        	drawColor=setDraw(drawColor);
+        
         } else if("Background Color".equals(command)){
     		BgColor(backgroundColor);
         }
@@ -739,6 +746,7 @@ public class JWhiteBoard extends ReceiverAdapter implements ActionListener, Chan
             if(gr == null) return;
             gr.clearRect(0, 0, getSize().width, getSize().height);
 //            repaint();
+        
             if(state != null) {
                 synchronized(state) {
                     state.clear();
