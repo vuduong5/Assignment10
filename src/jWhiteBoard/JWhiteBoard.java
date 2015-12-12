@@ -22,11 +22,9 @@ import java.util.List;
  * mouse moves are broadcast to all group members, which then apply them to their canvas<p>
  * @author Bela Ban, Oct 17 2001
  * 
- * taolao
- * coooo
+ * 
+ * 
  */
-//buttton
-//
 public class JWhiteBoard extends ReceiverAdapter implements ActionListener, ChannelListener {
 //	
 	Random randomGenerator = new Random();
